@@ -1,15 +1,23 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using ProductsApi.Model;
 
 namespace ProductsApi.Controllers
 {
     [Route("api/[controller]")]
     public class ProductsController : Controller
     {
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private static List<Product> _products;
+
+        public ProductsController()
         {
-            return new string[] { "SQL Source Control" };
+            _products = new List<Product>();
+        }
+
+        [HttpGet]
+        public IEnumerable<Product> Get()
+        {
+            return _products;
         }
     }
 }
