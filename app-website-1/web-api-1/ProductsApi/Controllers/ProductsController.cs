@@ -1,23 +1,34 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using ProductsApi.Model;
+using ProductsApi.Stores;
 
 namespace ProductsApi.Controllers
 {
     [Route("api/[controller]")]
     public class ProductsController : Controller
     {
-        private static List<Product> _products;
+        private ProductStore _store;
 
-        public ProductsController()
+        public ProductsController(ProductStore store)
         {
-            _products = new List<Product>();
+            _store = store;
         }
 
         [HttpGet]
-        public IEnumerable<Product> Get()
+        [Route("{name?}")]
+        public IEnumerable<Product> Get(string name)
         {
-            return _products;
+            Console.WriteLine(name);
+            return name == null ? _store.GetAll() : _store.GetByName(name);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody]Product product)
+        {
+            _store.Add(product);
+            return Ok();
         }
     }
 }
